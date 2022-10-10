@@ -1,0 +1,7 @@
+.pagination-item {
+    display: none;
+}
+
+.pagination-item--active {
+    display: block;
+}
