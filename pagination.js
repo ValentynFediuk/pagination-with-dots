@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const paginationWrapper = document.querySelector('.pagination-content')
   const paginationButtons = document.querySelector('.pagination-buttons')
   const nextButton = document.querySelector('.pagination-buttons__next')
+  const previousButton = document.querySelector('.pagination-buttons__previous')
   const itemsPerPage = 1
   let currentPage = 1
 
@@ -27,11 +28,25 @@ document.addEventListener("DOMContentLoaded", function() {
     const prevButton = document.createElement('button')
     prevButton.classList.add('pagination-buttons__previous')
     prevButton.textContent = 'previous'
+    prevButton.addEventListener('click', () => {
+      currentPage--
+      if (currentPage < 1) {
+        currentPage = 1
+      }
+      changePage(currentPage)
+    })
     paginationButtons.appendChild(prevButton)
 
     const nextButton = document.createElement('button')
     nextButton.classList.add('pagination-buttons__next')
     nextButton.textContent = 'next'
+    nextButton.addEventListener('click', () => {
+      currentPage++
+      if (currentPage > buttonsCount) {
+        currentPage = buttonsCount
+      }
+      changePage(currentPage)
+    })
     paginationButtons.appendChild(nextButton)
 
     for (let i = 0; i < buttonsCount; i++) {
@@ -43,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function() {
     let paginationItem = paginationWrapper.children[i]
     paginationItem.classList.add('pagination-item')
   }
-
 
   const paginationItems = document.querySelectorAll('.pagination-item')
 
@@ -65,15 +79,15 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-  // const setActiveButton = (page) => {
-  //   for (let i = 0; buttonsCount; i++) {
-  //     paginationButtons.children[i].classList.remove('active')
-  //   }
-  //
-  //     return paginationButtons.children[page + 1].classList.add('active')
-  // }
-  //
-  // setActiveButton(1)
+  const setActiveButton = (page) => {
+    for (let i = 0; paginationButtons.children.length > i; i++) {
+      paginationButtons.children[i].classList.remove('active')
+    }
+
+      return paginationButtons.children[page].classList.add('active')
+  }
+
+  setActiveButton(1)
 
   const rerenderButtons = (page) => {
     const dots = document.querySelector('.pagination-buttons__dots')
@@ -106,7 +120,23 @@ document.addEventListener("DOMContentLoaded", function() {
       paginationWrapper.children[i]?.classList.add('pagination-item--active')
     }
 
-    // setActiveButton(page)
+    setActiveButton(page)
   }
+
+  previousButton.addEventListener('click', () => {
+    currentPage--
+    if (currentPage < 1) {
+      currentPage = 1
+    }
+    changePage(currentPage)
+  })
+
+  nextButton.addEventListener('click', () => {
+    currentPage++
+    if (currentPage > buttonsCount) {
+      currentPage = buttonsCount
+    }
+    changePage(currentPage)
+  })
 });
 

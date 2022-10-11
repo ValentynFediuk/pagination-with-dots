@@ -5,3 +5,7 @@
 .pagination-item--active {
     display: block;
 }
+
+.pagination-buttons .active {
+    background: red;
+}
