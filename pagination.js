@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const paginationWrapper = document.querySelector('.pagination-content')
   const paginationButtons = document.querySelector('.pagination-buttons')
   const nextButton = document.querySelector('.pagination-buttons__next')
-  const itemsPerPage = 3
+  const itemsPerPage = 1
   let currentPage = 1
 
   const createButton = (textContent) => {
@@ -23,18 +23,27 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   const paginate = () => {
-    for (let i = 1; paginationButtons.children.length < i - 1; i++) {
-      paginationButtons.children[i].remove()
-    }
+    paginationButtons.innerHTML = ''
+    const prevButton = document.createElement('button')
+    prevButton.classList.add('pagination-buttons__previous')
+    prevButton.textContent = 'previous'
+    paginationButtons.appendChild(prevButton)
+
+    const nextButton = document.createElement('button')
+    nextButton.classList.add('pagination-buttons__next')
+    nextButton.textContent = 'next'
+    paginationButtons.appendChild(nextButton)
 
     for (let i = 0; i < buttonsCount; i++) {
       paginationButtons.insertBefore(createButton(`${i + 1}`), nextButton)
     }
   }
+
   for (let i = 0; paginationWrapper.children.length > i; i++) {
     let paginationItem = paginationWrapper.children[i]
     paginationItem.classList.add('pagination-item')
   }
+
 
   const paginationItems = document.querySelectorAll('.pagination-item')
 
@@ -56,22 +65,35 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
+  // const setActiveButton = (page) => {
+  //   for (let i = 0; buttonsCount; i++) {
+  //     paginationButtons.children[i].classList.remove('active')
+  //   }
+  //
+  //     return paginationButtons.children[page + 1].classList.add('active')
+  // }
+  //
+  // setActiveButton(1)
+
   const rerenderButtons = (page) => {
     const dots = document.querySelector('.pagination-buttons__dots')
+    let beforeDots = 3
     let afterDots = buttonsCount - page
     if (dots) {
+      let DotsPreviousButton = +dots.previousSibling.textContent
+
       if (afterDots === 3) {
-        let DotsPreviousButton = dots.previousSibling
-        dots.remove()
-          paginationButtons.insertBefore(createButton(+DotsPreviousButton.textContent + 1), DotsPreviousButton)
-          paginationButtons.insertBefore(createButton(+DotsPreviousButton.textContent + 2), DotsPreviousButton)
-      } else {
+          paginate()
+      } else if (page < beforeDots) {
+        return
+      }  else if (page === DotsPreviousButton) {
         paginationButtons.insertBefore(createButton(page + 1), dots)
+        beforeDots++
+      } else if (page === buttonsCount) {
+        paginate()
       }
     }
   }
-  paginate()
-
 
   const changePage = (page) => {
     rerenderButtons(page)
@@ -83,6 +105,8 @@ document.addEventListener("DOMContentLoaded", function() {
     for (let i = active; active + itemsPerPage > i; i++) {
       paginationWrapper.children[i]?.classList.add('pagination-item--active')
     }
+
+    // setActiveButton(page)
   }
 });
 
